@@ -1,0 +1,27 @@
+.body {
+  margin: 0px;
+}
+
+.container {
+  position: relative;
+  overflow: hidden;
+  height: 500px;
+  margin: 0px;
+}
+
+
+.speelwoord {
+  font-family: 'Arial', sans-serif;
+  font-size: 20px;
+  position: absolute;
+  right: 200px;
+  overflow: hidden;
+
+
+
+}
+
+}
+#canvas {
+  length: 200px;
+}
