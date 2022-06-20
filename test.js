@@ -8,7 +8,7 @@ speelwoord.style.color = "red";
   // console.log(woordenlijst);
 // }
 
-const woordenlijst = ["pannenkoek", "automobiel", "bureaustoel"];
+const woordenlijst = ["pannenkoek", "automobiel", "bureaustoel"; "televisietoestel"];
 lengtewoordenlijst = woordenlijst.length;
 
 var woord = "";
