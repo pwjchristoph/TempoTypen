@@ -8,8 +8,9 @@ speelwoord.style.color = "red";
   // console.log(woordenlijst);
 // }
 
-const woordenlijst = ["pannenkoek", "automobiel", "bureaustoel"; "televisietoestel"];
+const woordenlijst = ["pannenkoek", "automobiel", "bureaustoel", "televisietoestel"];
 lengtewoordenlijst = woordenlijst.length;
+
 
 var woord = "";
 lengtewoord = 0;
@@ -27,7 +28,6 @@ function woordBepalen(){
 
   randomwoordgetal = Math.round(Math.random() * (lengtewoordenlijst- 1));
 
-  console.log(randomwoordgetal);
 
 
   woord = woordenlijst[randomwoordgetal];
