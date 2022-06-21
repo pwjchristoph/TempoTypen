@@ -108,7 +108,7 @@ function wachten(ms) {
 }
 
 function beamverschuiven(pbeam) {
-  if (pbeam > 30){
+  if (pbeam > 8){
     beamright -= 1;
     beamteller -=1;
     beam.style.right = beamright + "px";
