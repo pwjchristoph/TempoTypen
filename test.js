@@ -22,6 +22,7 @@ var nieuwwoord = false;
 var punten = 0;
 var puntenbeam = 0;
 var beamteller = 1000;
+var eindgame = false;
 
 async function woordendownload(){
   var woorden = [];
@@ -65,17 +66,31 @@ function  woordMeten(huidigwoord) {
   teller2 = 0-lengtestring;
 };
 
+function  restwoordMeten(huidigwoord) {
+  const text2 = huidigwoord;
+  const font2 = "20px Arial";
+  const canvas = document.createElement("canvas");
+  const context2 = canvas.getContext("2d");
+  context2.font = font2;
+  const lengte2 = context2.measureText(text2);
+  lengtestring2 = lengte2.width;
+};
+
 async function beweegWoord() {
 
 while(teller <= beamteller){
-  puntenbeam += 0.5;
+  puntenbeam += 1;
+
   if (teller < beamteller && !nieuwwoord){
     var plek = teller2 + "px";
     speelwoord.style.right = plek;
     speelwoord.innerHTML = huidigwoord;
     teller2+=1;
+
     await wachten(5);
     teller +=1;
+    console.log(teller);
+
     beamverschuiven(puntenbeam);
   } else if (teller < beamteller && nieuwwoord){
     randomhoogte = 40 + Math.round(Math.random() * (innerHeight- 130));
@@ -93,12 +108,17 @@ while(teller <= beamteller){
     nieuwwoord = false;
   } else if (teller = beamteller) {
     // document.write("GAME OVER");
-    speelwoord.innerHTML = "";
-    gameover.innerHTML = "GAME OVER";
-    score.style.color = "red";
+    eindgame = true;
     teller++;
   }
   }
+eindgame = true;
+speelwoord.innerHTML = "";
+gameover.innerHTML = "GAME OVER";
+score.style.color = "red";
+
+
+// gameover.innerHTML = "DIT GAAT FOUT";
 }
 
 function wachten(ms) {
@@ -108,12 +128,11 @@ function wachten(ms) {
 }
 
 function beamverschuiven(pbeam) {
-  if (pbeam > 8){
+  if (pbeam > 6){
     beamright -= 1;
     beamteller -=1;
     beam.style.right = beamright + "px";
     puntenbeam = 0;
-    console.log(puntenbeam);
   }
 }
 
@@ -128,14 +147,21 @@ document.onkeydown = function(key){
 
 
 
-  if (letter == keypressed  && lengtewoord > 1){
+  if (letter == keypressed  && lengtewoord > 1 && !eindgame){
     huidigwoord = huidigwoord.substring(1,lengtewoord);
     speelwoord.innerHTML = huidigwoord;
     punten++;
     score.innerHTML = "score: " + punten;
 
+    restwoordMeten(huidigwoord);
 
-  } else if (letter == keypressed && lengtewoord == 1) {
+    restlengte = lengtestring - lengtestring2;
+    teller = teller - restlengte;
+    lengtestring = lengtestring2;
+    console.log(teller);
+    console.log(restlengte);
+
+  } else if (letter == keypressed && lengtewoord == 1 && !eindgame) {
 
     speelwoord.innerHTML = "";
     punten++;
