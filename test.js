@@ -1,121 +1,146 @@
 var speelwoord = document.getElementById("speelwoord");
 speelwoord.style.color = "red";
 
-
-// const fs = require('fs');
-// const array = fs.readFileSync('woorden2.txt').toString().split("\n");
-// for (const woordenlijst of array) {
-  // console.log(woordenlijst);
-// }
-
-const woordenlijst = ["pannenkoek", "automobiel", "bureaustoel", "televisietoestel", "salontafel"];
-lengtewoordenlijst = woordenlijst.length;
-
-
-var woord = "";
-lengtewoord = 0;
-var teller2 = 0;
-var teller3 = 0;
-var game = true;
-var teller = 0;
-
 var container = document.getElementById("container");
 var innerheight = innerHeight;
-
 container.style.height = innerheight + "px";
 
-function woordBepalen(){
+var score = document.getElementById("score");
+score.style.top = "10px";
+score.style.left = "10px";
 
-  randomwoordgetal = Math.round(Math.random() * (lengtewoordenlijst- 1));
+var gameover = document.getElementById("gameover");
+gameover.style.top = innerHeight/2 + "px";
+gameover.style.left = innerWidth/2 + "px";
 
-
-
-  woord = woordenlijst[randomwoordgetal];
-  lengtewoord = woord.length;
-
-}
-
-function randomGetal(){
-  randomgetal = 40 + Math.round(Math.random() * (innerHeight- 130));
-  speelwoord.style.top = randomgetal + "px";
-}
+var beam = document.getElementById("beam");
+var beamright = 1000;
 
 
+var teller = 0;
+var nieuwwoord = false;
+var punten = 0;
+var puntenbeam = 0;
+var beamteller = 1000;
 
-function wachten(ms) {
+async function woordendownload(){
+  var woorden = [];
+  const url1 = 'https://pwjchristoph.github.io/TempoTypen/woorden2.txt';
+  return fetch(url1)
+  .then(response => response.text())
+};
 
-  return new Promise( resolve => {
+woordendownload().then(data =>{
+  const woorden = data.split("\n");
+  woordafbeelden(woorden);
+})
 
-  setTimeout(()=> {resolve('')}, ms );
+function woordafbeelden(downloadlijst){
 
-  })
-}
+  woordenlijst = downloadlijst;
 
-function schuifOp(){
-  var plek = teller2 + "px";
-  speelwoord.style.right = plek;
-  speelwoord.innerHTML = woord;
+  randomhoogte = 40 + Math.round(Math.random() * (innerHeight- 130));
+  speelwoord.style.top = randomhoogte + "px";
 
-  teller2++;
-}
+  lengtewoordenlijst = woordenlijst.length;
+  randomwoord = Math.round(Math.random() * (lengtewoordenlijst- 1));
 
-async function beweegWoord() {
+  huidigwoord = woordenlijst[randomwoord];
 
-while(teller <= 500){
-  if (teller < 500){
-    schuifOp();
-    await wachten(20);
-    teller++;
-  } else if (teller = 500) {
-    document.write("GAME OVER");
-    teller++;
-  }
-}
+  woordMeten(huidigwoord);
 
-  //
-  // for(teller = 0; teller <500; teller++){
-  //   schuifOp();
-  //   await wachten(20);
-  // }
-}
+  beweegWoord();
 
-function  woordMeten() {
-  const text = woord;
+
+};
+
+function  woordMeten(huidigwoord) {
+  const text = huidigwoord;
   const font = "20px Arial";
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
   context.font = font;
   const lengte = context.measureText(text);
-  lengtewoord = lengte.width;
+  lengtestring = lengte.width;
+  teller2 = 0-lengtestring;
+};
 
-  teller2 = 0-lengtewoord;
+async function beweegWoord() {
 
+while(teller <= beamteller){
+  puntenbeam += 0.5;
+  if (teller < beamteller && !nieuwwoord){
+    var plek = teller2 + "px";
+    speelwoord.style.right = plek;
+    speelwoord.innerHTML = huidigwoord;
+    teller2+=1;
+    await wachten(5);
+    teller +=1;
+    beamverschuiven(puntenbeam);
+  } else if (teller < beamteller && nieuwwoord){
+    randomhoogte = 40 + Math.round(Math.random() * (innerHeight- 130));
+    speelwoord.style.top = randomhoogte + "px";
+
+    lengtewoordenlijst = woordenlijst.length;
+    randomwoord = Math.round(Math.random() * (lengtewoordenlijst- 1));
+
+    huidigwoord = woordenlijst[randomwoord];
+
+    woordMeten(huidigwoord);
+
+    teller = 0;
+    beamverschuiven(puntenbeam);
+    nieuwwoord = false;
+  } else if (teller = beamteller) {
+    // document.write("GAME OVER");
+    speelwoord.innerHTML = "";
+    gameover.innerHTML = "GAME OVER";
+    score.style.color = "red";
+    teller++;
+  }
+  }
 }
 
-while(game){
-  randomGetal();
-  woordBepalen();
-  woordMeten();
-  beweegWoord();
-  game = false;
+function wachten(ms) {
+  return new Promise( resolve => {
+  setTimeout(()=> {resolve('')}, ms );
+  })
+}
+
+function beamverschuiven(pbeam) {
+  if (pbeam > 30){
+    beamright -= 1;
+    beamteller -=1;
+    beam.style.right = beamright + "px";
+    puntenbeam = 0;
+    console.log(puntenbeam);
+  }
 }
 
 
 document.onkeydown = function(key){
 
   keypressed = key.key;
-  lengtewoord = woord.length;
+  lengtewoord = huidigwoord.length;
 
-  var woord2 = woord.substring(0,1);
 
-  if (woord2 == keypressed  && lengtewoord > 1){
-    woord = woord.substring(1,lengtewoord);
-    speelwoord.innerHTML = woord;
-  } else if (woord2 == keypressed && lengtewoord == 1) {
+  var letter = huidigwoord.substring(0,1);
+
+
+
+  if (letter == keypressed  && lengtewoord > 1){
+    huidigwoord = huidigwoord.substring(1,lengtewoord);
+    speelwoord.innerHTML = huidigwoord;
+    punten++;
+    score.innerHTML = "score: " + punten;
+
+
+  } else if (letter == keypressed && lengtewoord == 1) {
+
     speelwoord.innerHTML = "";
-      randomGetal();
-      woord = "tweedewoord";
-      woordMeten();
-      teller = 0;
+    punten++;
+    score.innerHTML = "score: " + punten;
+    nieuwwoord = true;
+
   }
 }

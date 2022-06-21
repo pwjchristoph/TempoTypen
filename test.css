@@ -7,6 +7,11 @@
   overflow: hidden;
   height: 500px;
   margin: 0px;
+  background-image: url('background2-basis.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+
 }
 
 
@@ -16,9 +21,24 @@
   position: absolute;
   right: 200px;
   overflow: hidden;
+}
 
+.score {
+  font-family: 'Acme';font-size: 22px;
+  position: absolute;
+  color: white;
+}
 
+.gameover {
+  font-family: 'Acme';font-size: 40px;
+  position: absolute;
+  color: white;
+}
 
+.beam {
+  position: absolute;
+  right: 1000px;
+  height: 100%;
 }
 
 }
